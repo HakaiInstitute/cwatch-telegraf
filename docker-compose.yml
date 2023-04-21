@@ -1,0 +1,15 @@
+version: '3.6'
+services:
+  fluentd:
+    image: fluent/fluentd:v1.16-debian-1
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 9880:9880
+    volumes:
+      - ./config:/fluentd/etc
+      - ./pos:/fluentd/pos
+      - type: bind
+        source: ${LOG_FILE}
+        target: /fluentd/log/ssl_access_log
