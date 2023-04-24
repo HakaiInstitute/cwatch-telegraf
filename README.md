@@ -8,6 +8,9 @@ edit .env values
 
 review config/httpd_fluentd.conf
 
+touch pos/httpd-logs.pos
+sudo chgrp 999 pos/httpd-logs.pos
+
 sudo docker-compose up -d
 
 
