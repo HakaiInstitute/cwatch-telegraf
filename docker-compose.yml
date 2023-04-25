@@ -1,7 +1,8 @@
 version: '3.6'
 services:
   fluentd:
-    image: fluent/fluentd:v1.16-debian-1
+    build: .
+    image: cioos/fluentd
     restart: always
     env_file:
       - .env
