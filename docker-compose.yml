@@ -7,8 +7,7 @@ services:
     env_file:
       - .env
     ports:
-      - 9880:9880
-      - 28888:28888 # health check port
+      - 9888:9888 # health check port
     volumes:
       - ./config:/fluentd/etc
       - ./pos:/fluentd/pos
