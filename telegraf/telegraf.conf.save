@@ -1,0 +1,111 @@
+[[inputs.tail]]
+   files = ["/telegraf/log/ssl_access_log*"]
+   from_beginning = true
+   ### format /^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^ ]*) +\S*)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")? (?<request_time>[^ ]*)$/
+   grok_patterns = ["%{COMBINED_LOG_FORMAT}"]
+   name_override = "apache_access_log"
+   watch_method = "poll"
+   grok_timezone = "UTC"
+   data_format = "grok"
+   grok_unique_timestamp="disable"
+
+[[processors.converter]]
+  order = 2
+  [processors.converter.fields]
+    integer = ["resp_bytes"]
+
+  [processors.converter.tags]
+    string = ["resp_code"]
+
+[[processors.regex]]
+  order = 3
+  [[processors.regex.fields]]
+    key = "agent"
+    pattern = "^.*(/dataforseo.com/dataforseo-bot|www.semrush.com/bot.html|Koj Bot|yandex.com/bots|www.bing.com/bingbot.htm|webmaster.petalsearch.com/site/petalbot|www.google.com/bot.html|babbar.tech/crawler|webmeup-crawler.com|ahrefs.com/robot|neeva.com/neevabot|opensiteexplorer.org/dotbot/).*"
+    replacement = "yes"
+    result_key = "exclude"
+
+  [[processors.regex.fields]]
+    key = "resp_code"
+    pattern = "^2\\d+$"
+    replacement = "yes"
+    result_key = "include1"
+
+  [[processors.regex.fields]]
+    key = "request"
+    pattern = "^/erddap/(tabledap|griddap)/[a-zA-Z0-9_]+\\.[a-zA-Z0-9_]+"
+    replacement = "yes"
+    result_key = "include2"
+
+  [[processors.regex.fields]]
+    key = "request"
+    pattern = "(\\.css|\\.html|\\.js)(\\?|$)"
+    replacement = "yes"
+    result_key = "exclude"
+
+[[processors.rename]]
+  order = 5
+  [[processors.rename.replace]]
+    field = "resp_code"
+    dest = "code"
+
+  [[processors.rename.replace]]
+    field = "request"
+    dest = "path"
+
+  [[processors.rename.replace]]
+    field = "client_ip"
+    dest = "host"
+
+  [[processors.rename.replace]]
+    tag = "verb"
+    dest = "method"
+
+  [[processors.rename.replace]]
+    field = "resp_bytes"
+    dest = "size"
+
+[[processors.starlark]]
+  order = 6
+  source = '''
+def apply(metric):
+  if metric.fields.get('exclude'):
+    return None
+  if metric.fields.get('include1') == None:
+    return None
+  if metric.fields.get('include2') == None:
+    return None
+
+  metric.fields.pop("include1")
+  metric.fields.pop("include2")
+
+  metric.fields['name'] = "File Download"
+  metric.fields['domain'] = "${DOMAINS}"
+  metric.fields['props'] = {
+    "url": "${HOST_URL}metrix.fields['path']"
+    "download_size": metrix.fields['size']
+  }
+
+  return metric
+'''
+
+[[outputs.file]]
+  files = ["stdout"]
+  data_format = "json"
+  json_timestamp_units = "1s"
+  json_transformation = '$merge([{"name": name, "timestamp": timestamp}, tags, fields])'
+
+
+[[outputs.http]]
+  url = "${PLAUSIBLE_URL}"
+  method = "POST"
+  timeout = "5s"
+  data_format = "json"
+  json_timestamp_units = "1s"
+  json_transformation = '$merge([{"name": name, "timestamp": timestamp}, tags, fields])'
+  [outputs.http.headers]
+    Content-Type = "application/json; charset=utf-8"
+    User-Agent = "$tags.agent"
+    X-Forwarded-For = "$tags.host"
+
+
