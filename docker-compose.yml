@@ -18,6 +18,7 @@ services:
   telegraf:
     image: cioos/telegraf:latest
     build: ./telegraf/
+    restart: always
     tty: true
     read_only: false
     env_file:
