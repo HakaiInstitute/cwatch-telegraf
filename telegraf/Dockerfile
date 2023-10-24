@@ -17,6 +17,9 @@ RUN rm /etc/incron.allow
 ADD incron.conf /telegraf/telegraf_incron.conf
 RUN incrontab /telegraf/telegraf_incron.conf
 
+COPY entrypoint-extended.sh /
+RUN chmod +x /entrypoint-extended.sh
 
+ENTRYPOINT ["/entrypoint-extended.sh"]
 
-
+CMD ["telegraf"]
