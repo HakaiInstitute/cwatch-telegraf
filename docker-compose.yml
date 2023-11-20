@@ -27,7 +27,7 @@ services:
     - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     - type: bind
       source: ${LOG_FILE}
-      target: /telegraf/log/ssl_access_log
+      target: /telegraf/log/
     ports:
     - 8125:8125/udp
     - 8092:8092/udp
