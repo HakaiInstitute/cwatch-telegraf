@@ -1,1 +1,0 @@
-This folder holds fluentd tail position file to track where tail got to the last time it was run

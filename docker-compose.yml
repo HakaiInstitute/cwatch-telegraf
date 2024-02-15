@@ -1,20 +1,5 @@
 version: '3.6'
 services:
-#  fluentd:
-#    build: .
-#    image: cioos/fluentd
-#    restart: always
-#    env_file:
-#      - .env
-#    ports:
-#      - 9888:9888 # health check port
-#    volumes:
-#      - ./config:/fluentd/etc
-#      - ./pos:/fluentd/pos
-#      - type: bind
-#        source: ${LOG_FILE}
-#        target: /fluentd/log/ssl_access_log
-
   telegraf:
     image: cioos/telegraf:latest
     build: ./telegraf/

@@ -1,35 +1,29 @@
-# cwatch-fluentd
-fluentd log wrangling
-
+# cwatch-telegraf
+telegraf log wrangling
+see https://www.influxdata.com/time-series-platform/telegraf/ for more details on teleraf
 
 # Quick Start
+
+create env file
+```
 cp .env.sample .env
-edit .env values
+```
 
-review config/httpd_fluentd.conf
+edit .env values. This to check are
+  - LOG_FILE - this should point to the nginx or apache log folder. not directly to a file.
+  - HOST_URL - hostname to report in plausible with protocol
+  - DOMAINS - keys used by plausible to route events see https://plausible.io/docs/events-api#request-body-json-parameters
+  - PLAUSIBLE_URL - url to plausible instance 
+  - SENTRY_URL - url to sentry project for monitering up time
 
-touch pos/httpd-logs.pos
-sudo chgrp 999 pos/httpd-logs.pos
+review telegraf/telegraf.conf. the most important one being
+  - `files` under [[inputs.tail]]
 
+Start the container
+```
 sudo docker-compose up -d
-
-# enable health checks
-proxy port 9888 on the container to something relevant in your apache or nginx proxy.
-
-for example, add the following to your apache proxy
-```
-  <location /fluentd>
-      ProxyPreserveHost On
-      ProxyPass http://localhost:9888
-      ProxyPassReverse http://localhost:9888
-  </location>
-```
-
-Then add an entry for the following url to cwatch-upptime
-```
-  https://data.yourdomain.ca/fluentd
 ```
 
 
 # TODO
-- create a fluentd conf for nginx
+- create a telegraf conf for nginx
