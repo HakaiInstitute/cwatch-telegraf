@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   telegraf:
-    image: cioos/telegraf:latest
+    image: hakaiinstitute/telegraf:latest
     build: ./telegraf/
     restart: always
     tty: true
