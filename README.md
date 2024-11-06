@@ -27,3 +27,4 @@ sudo docker-compose up -d
 
 # TODO
 - create a telegraf conf for nginx
+- log file name is hard coded i.e. catalogue-ssl-access.log. it would be nice to make it based on an environment variable.
