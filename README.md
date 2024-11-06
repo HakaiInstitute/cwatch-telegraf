@@ -19,10 +19,23 @@ edit .env values. This to check are
 review telegraf/telegraf.conf. the most important one being
   - `files` under [[inputs.tail]]
 
+find the group that has read access to the log files
+```
+stat -c '%g' /var/log/apache2
+```
+
+use the resulting number to set the group in the telegraf container by editing the docker compose and adding
+```
+user: telegraf:4
+```
+where `4` is the gid of the group
+
+
 Start the container
 ```
 sudo docker-compose up -d
 ```
+
 
 
 # TODO

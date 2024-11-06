@@ -6,6 +6,7 @@ services:
     restart: always
     tty: true
     read_only: false
+    user: telegraf:4
     env_file:
       - .env
     volumes:
