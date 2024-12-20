@@ -4,11 +4,11 @@ import json
 import os
 
 url = os.environ.get(
-    'GA_URL', 'http://www.google-analytics.com/mp/collect')
+    'TELEGRAF_GA_URL', 'http://www.google-analytics.com/mp/collect')
 secret = os.environ.get(
-    'GA_API_SECRET')
+    'TELEGRAF_GA_API_SECRET')
 id = os.environ.get(
-    'GA_MEASUREMENT_ID')
+    'TELEGRAF_GA_MEASUREMENT_ID')
 
 full_url = f"{url}?api_secret={secret}&measurement_id={id}"
 

@@ -3,7 +3,7 @@ import requests
 import json
 import os
 
-url = os.environ.get('SENTRY_URL')
+url = os.environ.get('TELEGRAF_SENTRY_URL')
 
 for line in sys.stdin:
     sys.stdout.write(line)

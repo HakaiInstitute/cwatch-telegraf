@@ -11,10 +11,10 @@ cp .env.sample .env
 
 edit .env values. This to check are
   - LOG_FILE - this should point to the nginx or apache log folder. not directly to a file.
-  - HOST_URL - hostname to report in plausible with protocol
-  - DOMAINS - keys used by plausible to route events see https://plausible.io/docs/events-api#request-body-json-parameters
+  - TELEGRAF_HOST_URL - hostname to report in plausible with protocol
+  - TELEGRAF_DOMAINS - keys used by plausible to route events see https://plausible.io/docs/events-api#request-body-json-parameters
   - PLAUSIBLE_URL - url to plausible instance 
-  - SENTRY_URL - url to sentry project for monitering up time
+  - TELEGRAF_SENTRY_URL - url to sentry project for monitering up time
 
 review telegraf/telegraf.conf. the most important one being
   - `files` under [[inputs.tail]]
