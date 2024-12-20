@@ -20,6 +20,7 @@ RUN incrontab /telegraf/telegraf_incron.conf
 
 COPY entrypoint-extended.sh /
 RUN chmod +x /entrypoint-extended.sh
+ADD ./telegraf_GA.conf /etc/telegraf/telegraf.conf
 
 ENTRYPOINT ["/entrypoint-extended.sh"]
 
