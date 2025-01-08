@@ -1,5 +1,5 @@
-# cwatch-telegraf
-telegraf log wrangling
+# hakai-erddap-telegraf
+telegraf log wrangling to scrape apache or nginx logs for erddap related requests and sent to plausible or google analytics event api's
 see https://www.influxdata.com/time-series-platform/telegraf/ for more details on teleraf
 
 # Quick Start
@@ -36,8 +36,5 @@ Start the container
 sudo docker-compose up -d
 ```
 
-
-
 # TODO
-- create a telegraf conf for nginx
 - log file name is hard coded i.e. catalogue-ssl-access.log. it would be nice to make it based on an environment variable.
